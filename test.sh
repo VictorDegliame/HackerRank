@@ -24,7 +24,7 @@ do
   num=`echo $f | sed -r 's/.+input([0-9]+)\.txt/\1/g'`
   cat $f | ./prog > $MY_OUTPUT_FILE
   # Do a diff but ignore trailing new lines
-  result=`diff -Z ${MY_OUTPUT_FILE} "$OUTPUT_FILES/output$num.txt"`
+  result=`diff -w ${MY_OUTPUT_FILE} "$OUTPUT_FILES/output$num.txt"`
   if [ "$?" -eq 0 ]
   	then
   	echo -e "${bold}${green}${tick}${normal}"
