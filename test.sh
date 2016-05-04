@@ -30,6 +30,9 @@ do
   	echo -e "${bold}${green}${tick}${normal}"
   else
   	echo -e "${bold}${red}${cross}${normal}"
-    echo $result
+    echo -e "\nExpected results"
+    cat "$OUTPUT_FILES/output$num.txt"
+    echo -e "\nYour results:"
+    cat "${MY_OUTPUT_FILE}"
   fi
 done
