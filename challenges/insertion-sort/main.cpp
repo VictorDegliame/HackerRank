@@ -6,65 +6,48 @@
 #include <algorithm>
 using namespace std;
 
-// Some debugging functions:
-template<typename T>
-void printVector(ostream& os, const vector<T>& vec) noexcept {
-    os << "[";
-    if (vec.size() != 0) {
-        for (auto it = begin(vec); it != end(vec) - 1; ++it) {
-            os << *it << ", ";
+long mergeSortCountLeftShifts(vector<int>& v, int left, int right, vector<int>& resultVector) {
+    if (left == right) {
+        resultVector[0] = v[left];
+        return 0;
+    }
+    const int mid = (left + right) / 2;
+    const int sizeLeft = mid - left + 1;
+    vector<int> leftVec(sizeLeft);
+    long res = mergeSortCountLeftShifts(v, left, mid, leftVec);
+    const int sizeRight = right - mid;
+    vector<int> rightVec(sizeRight);
+    res += mergeSortCountLeftShifts(v, mid + 1, right, rightVec);
+
+    int leftIt = 0;
+    int rightIt = 0;
+    int resPos = 0;
+
+    while (leftIt < sizeLeft || rightIt < sizeRight) {
+        while (leftIt < sizeLeft && (rightIt == sizeRight || leftVec[leftIt] <= rightVec[rightIt])) {
+            resultVector[resPos++] = leftVec[leftIt++];
         }
-        os << vec.back();
+        while (rightIt < sizeRight && (leftIt == sizeLeft || leftVec[leftIt] > rightVec[rightIt])) {
+            resultVector[resPos++] = rightVec[rightIt++];
+            res += mid - left + 1 - leftIt; // We shift by how many elements are left in the end of the left vector.
+        }
     }
-    os << "]" << endl;
-}
 
-template <typename T1, typename T2>
-void printMap(ostream& os, const map<T1, vector<T2>>& map) noexcept {
-    os << "{" << endl;
-    for (auto it = begin(map); it != end(map); ++it) {
-        os << it->first << " -> ";
-        printVector(os, it->second);
-        if (next(it) != end(map))
-            os << ", ";
-        os << endl;
-    }
-    os << "}" << endl;
-}
-
-template <typename T1, typename T2>
-void printMap(ostream& os, const map<T1, T2> map) noexcept {
-    os << "{" << endl;
-    for (auto it = begin(map); it != end(map); ++it) {
-        os << it->first << " -> " << it->second;
-        if (next(it) != end(map))
-            os << ", ";
-        os << endl;
-    }
-    os << "}" << endl;
+    return res;
 }
 
 int main() {
     int nbTests;
     cin >> nbTests;
-    map<int, int> orderedMap;
 
     for (int i = 0; i < nbTests; ++i) {
         int n;
         cin >> n;
-        for (int j = 0; j < n; ++j) {
-            int c;
-            cin >> c;
-            int howManyAreBigger = 0;
-            if (orderedMap.count(c) == 0) {
-                // insert new key value pair
-                orderedMap.insert(make_pair(c, 0));
-            }
-            orderedMap[c]++;
-        }
-
-        //printMap(cout, orderedMap);
-        orderedMap.clear();
+        vector<int> v(n, 0);
+        for (int j = 0; j < n; ++j)
+            cin >> v[j];
+        vector<int> ignoredResult(n);
+        cout << mergeSortCountLeftShifts(v, 0, n - 1, ignoredResult) << endl;
     }
     return 0;
 }
