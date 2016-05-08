@@ -16,7 +16,7 @@ cross="\u274C"
 regex="input([0-9])+\.txt"
 
 # Compile c++ code in main.cpp by default
-g++ main.cpp -o prog -std=c++11
+g++ main.cpp -o prog -std=c++11 -g -Wall -Wpedantic
 
 for f in $INPUT_FILES
 do
@@ -24,12 +24,15 @@ do
   num=`echo $f | sed -r 's/.+input([0-9]+)\.txt/\1/g'`
   cat $f | ./prog > $MY_OUTPUT_FILE
   # Do a diff but ignore trailing new lines
-  result=`diff -Z ${MY_OUTPUT_FILE} "$OUTPUT_FILES/output$num.txt"`
+  result=`diff -w ${MY_OUTPUT_FILE} "$OUTPUT_FILES/output$num.txt"`
   if [ "$?" -eq 0 ]
   	then
   	echo -e "${bold}${green}${tick}${normal}"
   else
   	echo -e "${bold}${red}${cross}${normal}"
-    echo $result
+    echo -e "Expected results"
+    cat "$OUTPUT_FILES/output$num.txt"
+    echo -e "\nYour results"
+    cat "${MY_OUTPUT_FILE}"
   fi
 done
