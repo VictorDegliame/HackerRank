@@ -10,8 +10,8 @@ red=$(tput setaf 1)
 green=$(tput setaf 2)
 
 # This is the valid/tick character, in green
-tick="\u2713"
-cross="\u274C"
+tick="✓"
+cross="❌"
 
 regex="input([0-9])+\.txt"
 
@@ -24,7 +24,7 @@ do
   num=`echo $f | sed -r 's/.+input([0-9]+)\.txt/\1/g'`
   cat $f | ./prog > $MY_OUTPUT_FILE
   # Do a diff but ignore trailing new lines
-  result=`diff -w ${MY_OUTPUT_FILE} "$OUTPUT_FILES/output$num.txt"`
+  result=`diff -wB ${MY_OUTPUT_FILE} "$OUTPUT_FILES/output$num.txt"`
   if [ "$?" -eq 0 ]
   	then
   	echo -e "${bold}${green}${tick}${normal}"
@@ -32,7 +32,7 @@ do
   	echo -e "${bold}${red}${cross}${normal}"
     echo -e "Expected results"
     cat "$OUTPUT_FILES/output$num.txt"
-    echo -e "\nYour results"
+    echo -e "Your results:"
     cat "${MY_OUTPUT_FILE}"
   fi
 done
