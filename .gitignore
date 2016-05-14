@@ -27,7 +27,10 @@
 *.out
 *.app
 
+# Tmp and bin files
+**/tmpOutput.txt
+**/prog
+
 # Big Test Cases
 challenges/insertion-sort/input/input13.txt
 challenges/insertion-sort/output/output13.txt
-**/tmpOutput.txt
