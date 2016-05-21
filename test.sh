@@ -20,7 +20,7 @@ g++ main.cpp -o prog -std=c++11 -g -Wall -Wpedantic
 
 for f in $INPUT_FILES
 do
-  echo "Processing $f file..."
+  echo -e "Processing $f file..."
   num=`echo $f | sed -r 's/.+input([0-9]+)\.txt/\1/g'`
   cat $f | ./prog > $MY_OUTPUT_FILE
   # Do a diff but ignore trailing new lines
@@ -32,7 +32,8 @@ do
   	echo -e "${bold}${red}${cross}${normal}"
     echo -e "Expected results"
     cat "$OUTPUT_FILES/output$num.txt"
-    echo -e "Your results:"
+    echo -e "\nYour results:"
     cat "${MY_OUTPUT_FILE}"
+    echo -e "\n"
   fi
 done
