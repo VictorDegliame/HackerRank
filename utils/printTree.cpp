@@ -7,8 +7,8 @@ void printTreePreOrder(ostream& os, const T* t) {
 	if (t == nullptr)
 		return;
 	os << *t << " ";
-	printTreeInOrder(os, t->left);
-	printTreeInOrder(os, t->right);
+	printTreePreOrder(os, t->left);
+	printTreePreOrder(os, t->right);
 }
 
 // Some debugging functions:
